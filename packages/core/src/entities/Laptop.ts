@@ -16,28 +16,40 @@ export interface LaptopParams {
 }
 
 export class Laptop {
-    protected build: LaptopParams;
+    static readonly MAX_BATTERY_PERCENTAGE: number = 100
+    static readonly LOW_BATTERY_ALARM_PERCENTAGE: number = 15
+
+    private parts: LaptopParams;
 
     constructor(params: LaptopParams) {
-        this.build = this.buildLaptop(params);
+        this.parts = {
+            ...params,
+            battery: this.ensureBatteryDoesNotExceedPercentage(params.battery),
+        };
     }
 
     public static new(params: LaptopParams): Laptop {
         return new this(params);
     }
 
-    private buildLaptop(params: LaptopParams): LaptopParams {
-        return (this.build = {
-            ...params,
-            ...{
-                battery: this.ensureBatteryDoesNotExceedPercentage(params.battery),
-            },
-        });
+    public getParts(): LaptopParams {
+        return this.parts;
     }
 
-    private ensureBatteryDoesNotExceedPercentage(battery: number): number {
-        const MAX_BATTERY_PERCENTAGE = 100
+    public setBattery(value: number): void {
+        this.getParts().battery = this.ensureBatteryDoesNotExceedPercentage(value);
+    }
 
-        return battery > MAX_BATTERY_PERCENTAGE ? MAX_BATTERY_PERCENTAGE : battery;
+    public isLowBattery(): boolean {
+        return this.getParts().battery <= Laptop.LOW_BATTERY_ALARM_PERCENTAGE;
+    }
+
+    /**
+     * This method ensure the battery never exceed the 100%
+     * @param battery 
+     * @returns The battery value to set in the laptop
+     */
+    private ensureBatteryDoesNotExceedPercentage(battery: number): number {
+        return battery > Laptop.MAX_BATTERY_PERCENTAGE ? Laptop.MAX_BATTERY_PERCENTAGE : battery;
     }
 }
