@@ -40,6 +40,10 @@ export class Laptop {
         this.getParts().battery = this.ensureBatteryDoesNotExceedPercentage(value);
     }
 
+    public hasBattery(): boolean {
+        return this.getParts().battery > 0
+    }
+
     public isLowBattery(): boolean {
         return this.getParts().battery <= Laptop.LOW_BATTERY_ALARM_PERCENTAGE;
     }
@@ -50,6 +54,8 @@ export class Laptop {
      * @returns The battery value to set in the laptop
      */
     private ensureBatteryDoesNotExceedPercentage(battery: number): number {
+        if (battery < 0) return 0
+
         return battery > Laptop.MAX_BATTERY_PERCENTAGE ? Laptop.MAX_BATTERY_PERCENTAGE : battery;
     }
 }
