@@ -1,1 +1,1 @@
-export {}
+export const entry = (): void => {};
