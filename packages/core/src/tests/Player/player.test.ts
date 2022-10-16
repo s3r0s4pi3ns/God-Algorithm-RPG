@@ -15,7 +15,7 @@ describe("Player basic functionality", () => {
     expect(player.programmingLanguage).toBe(PROGRAMMING_LANGUAGE.PYTHON);
   });
 
-  it("The Player swithProgrammingLanguage method should be chained and return the player instance", () => {
+  it("The swithProgrammingLanguage method should be chained and return the player instance", () => {
     const player = new PlayerFactory().create({
       programmingLanguage: PROGRAMMING_LANGUAGE.PHP,
     });

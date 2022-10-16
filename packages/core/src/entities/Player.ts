@@ -1,4 +1,5 @@
 import { RANK, PROGRAMMING_LANGUAGE, JOB_POSITION } from "../types/enums";
+import { Item } from "./Item";
 import { Laptop } from "./Laptop";
 
 export interface PlayerParams {
@@ -6,6 +7,7 @@ export interface PlayerParams {
   programmingLanguage: PROGRAMMING_LANGUAGE;
   rank: RANK;
   jobPosition: JOB_POSITION;
+  items: Item[];
   laptop: Laptop;
 }
 
@@ -14,6 +16,7 @@ export class Player {
   programmingLanguage: PROGRAMMING_LANGUAGE;
   rank: RANK;
   jobPosition: JOB_POSITION;
+  private readonly items: Item[] = []
   private readonly laptop: Laptop;
 
   constructor(params: PlayerParams) {
@@ -21,6 +24,7 @@ export class Player {
     this.programmingLanguage = params.programmingLanguage;
     this.rank = params.rank;
     this.jobPosition = params.jobPosition;
+    this.items = params.items || [];
     this.laptop = params.laptop;
   }
 
@@ -30,6 +34,10 @@ export class Player {
 
   public accessLaptop(): Laptop {
     return this.laptop;
+  }
+
+  public accessItems(): Item[] {
+    return this.items;
   }
 
   public canUseLaptop(): boolean {
