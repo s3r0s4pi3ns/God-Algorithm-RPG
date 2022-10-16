@@ -2,15 +2,22 @@ import { Item, ItemResult, ItemShape } from "../entities/Item";
 import { Laptop } from "../entities/Laptop";
 import { Player } from "../entities/Player";
 
+export interface BatteryChargerShape extends ItemShape {
+    rechargeQuantity: number;
+}
 export class BatteryCharger extends Item {
     rechargeQuantity: number;
 
-    constructor(data: ItemShape, rechargeQuantity: number) {
+    constructor(data: BatteryChargerShape) {
         super(data)
-        this.rechargeQuantity = rechargeQuantity;
+        this.rechargeQuantity = data.rechargeQuantity;
     }
 
-    canBeUsed(player: Player, targets: Player[]): boolean {
+    public static new(data: BatteryChargerShape): BatteryCharger {
+        return new this(data);
+    }
+
+    canBeUsedOnPlayer(player: Player): boolean {
         return player.accessLaptop().getParts().battery < Laptop.MAX_BATTERY_PERCENTAGE;
     }
 

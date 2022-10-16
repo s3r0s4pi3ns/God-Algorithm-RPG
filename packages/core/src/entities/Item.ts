@@ -26,16 +26,26 @@ export abstract class Item {
         this.quantity = quantity;
     }
 
-    abstract canBeUsed(player: Player, targets: Player[]): boolean
+    abstract canBeUsedOnPlayer(player: Player): boolean
+
     abstract consume(player: Player, targets: Player[]): ItemResult
 
     public setQuantity(quantity: number): void {
-        if (typeof quantity !== 'number' || Number.isNaN(quantity)) {
-            throw new Error(`The quantity parameter for item ${this.name} is not a valid integer`)
-        }
+        this.ensureQuantityIsValidInteger(quantity)
 
         if (quantity < 0) this.quantity = 0;
 
         this.quantity = quantity;
+    }
+
+    /**
+     * 
+     * @param quantity 
+     * @throws Error - When the quantity is not a valid argument
+        */
+    private ensureQuantityIsValidInteger(quantity: number): void {
+        if (typeof quantity !== 'number' || Number.isNaN(quantity)) {
+            throw new Error(`The quantity parameter for item ${this.name} is not a valid integer`)
+        }
     }
 }
