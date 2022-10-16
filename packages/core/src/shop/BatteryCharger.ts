@@ -21,12 +21,10 @@ export class BatteryCharger extends Item {
         return player.accessLaptop().getParts().battery < Laptop.MAX_BATTERY_PERCENTAGE;
     }
 
-    consume(player: Player, targets: Player[]): ItemResult {
-        player.accessLaptop().setBattery(this.rechargeQuantity)
-
-        if (targets.length) {
-            targets.forEach(target => target.accessLaptop().setBattery(this.rechargeQuantity))
-        }
+    consume(player: Player): ItemResult {
+        player
+            .accessLaptop()
+            .setBattery(player.accessLaptop().getParts().battery + this.rechargeQuantity)
 
         return {
             success: true,

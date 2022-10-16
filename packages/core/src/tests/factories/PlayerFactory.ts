@@ -4,6 +4,7 @@ import { Factory } from "./factory";
 import { Player, PlayerParams } from "../../entities/Player";
 import { JOB_POSITION, PROGRAMMING_LANGUAGE, RANK } from "../../types/enums";
 import { LaptopFactory } from "./LaptopFactory";
+import { BatteryChargerFactory } from "./Items/BatteryChargerFactory";
 
 export class PlayerFactory implements Factory<Player> {
   create(params: Partial<Player | PlayerParams> = {}): Player {
@@ -17,9 +18,10 @@ export class PlayerFactory implements Factory<Player> {
           jobPosition: faker.helpers.arrayElement(Object.values(JOB_POSITION)),
           rank: faker.helpers.arrayElement(Object.values(RANK)),
           laptop: new LaptopFactory().create(),
+          items: [new BatteryChargerFactory().create()],
           ...params,
         },
-        ["id", "programmingLanguage", "rank", "jobPosition", "laptop"]
+        ["id", "programmingLanguage", "rank", "jobPosition", "laptop", 'items']
       )
     );
   }

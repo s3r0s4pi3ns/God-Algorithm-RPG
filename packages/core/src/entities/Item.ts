@@ -28,7 +28,7 @@ export abstract class Item {
 
     abstract canBeUsedOnPlayer(player: Player): boolean
 
-    abstract consume(player: Player, targets: Player[]): ItemResult
+    abstract consume(player: Player): ItemResult
 
     public setQuantity(quantity: number): void {
         this.ensureQuantityIsValidInteger(quantity)
