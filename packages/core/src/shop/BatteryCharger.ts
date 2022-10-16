@@ -22,13 +22,21 @@ export class BatteryCharger extends Item {
     }
 
     consume(player: Player): ItemResult {
-        player
-            .accessLaptop()
-            .setBattery(player.accessLaptop().getParts().battery + this.rechargeQuantity)
+        if (this.canBeUsedOnPlayer(player)) {
+            player
+                .accessLaptop()
+                .setBattery(player.accessLaptop().getParts().battery + this.rechargeQuantity)
+
+            return {
+                success: true,
+                message: `Increased the battery life by ${this.rechargeQuantity}%`,
+                playersInvolved: [player]
+            }
+        }
 
         return {
-            success: true,
-            message: `Increased the battery life by ${this.rechargeQuantity}%`,
+            success: false,
+            message: `The player ${player.id} is full battery`,
             playersInvolved: [player]
         }
     }
