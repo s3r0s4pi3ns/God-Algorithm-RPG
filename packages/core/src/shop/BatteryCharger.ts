@@ -18,7 +18,7 @@ export class BatteryCharger extends Item {
     }
 
     canBeUsedOnPlayer(player: Player): boolean {
-        return player.accessLaptop().getParts().battery < Laptop.MAX_BATTERY_PERCENTAGE;
+        return !Boolean(player.accessLaptop().isFullBattery());
     }
 
     consume(player: Player): ItemResult {

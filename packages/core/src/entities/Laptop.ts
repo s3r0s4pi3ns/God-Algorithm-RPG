@@ -48,6 +48,10 @@ export class Laptop {
     return this.getParts().battery <= Laptop.LOW_BATTERY_ALARM_PERCENTAGE;
   }
 
+  public isFullBattery(): boolean {
+    return this.getParts().battery === Laptop.MAX_BATTERY_PERCENTAGE;
+  }
+
   /**
    * This method ensure the battery never exceed the 100%
    * @param battery

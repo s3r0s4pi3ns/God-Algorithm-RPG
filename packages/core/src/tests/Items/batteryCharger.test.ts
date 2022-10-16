@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest'
+import { Laptop } from '../../entities/Laptop'
 import { BatteryChargerFactory } from '../factories/Items/BatteryChargerFactory'
 import { LaptopFactory } from '../factories/LaptopFactory'
 import { PlayerFactory } from '../factories/PlayerFactory'
@@ -33,5 +34,23 @@ describe("Battery charger item functionality", () => {
             message: `Increased the battery life by 15%`
         })
         expect(player.accessLaptop().getParts().battery).toBe(65)
+    })
+
+    it("should not be able to be used if the player laptop is full battery", () => {
+        const player = new PlayerFactory().create({
+            items: [new BatteryChargerFactory().create({ rechargeQuantity: 15 })],
+            laptop: new LaptopFactory().create({ battery: Laptop.MAX_BATTERY_PERCENTAGE })
+        })
+        expect(player.accessItems()[0].canBeUsedOnPlayer(player)).toBeFalsy()
+    })
+
+    it("should not recharge more than the laptop maximum if the rechargeQuantity exceeds the laptop battery after fill", () => {
+        const player = new PlayerFactory().create({
+            items: [new BatteryChargerFactory().create({ rechargeQuantity: 15 })],
+            laptop: new LaptopFactory().create({ battery: 90 })
+        })
+        expect(player.accessItems()[0].canBeUsedOnPlayer(player)).toBeTruthy()
+        player.accessItems()[0].consume(player)
+        expect(player.accessLaptop().isFullBattery()).toBeTruthy()
     })
 })
