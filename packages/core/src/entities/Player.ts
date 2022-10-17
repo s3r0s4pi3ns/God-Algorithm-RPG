@@ -1,5 +1,5 @@
 import { RANK, PROGRAMMING_LANGUAGE, JOB_POSITION } from "../types/enums";
-import { Item } from "./Item";
+import { Item, ItemResult } from "./Item";
 import { Laptop } from "./Laptop";
 
 export interface PlayerParams {
@@ -38,6 +38,31 @@ export class Player {
 
   public accessItems(): Item[] {
     return this.items;
+  }
+
+  public findItemById(id: string): Item | undefined {
+    return this.accessItems().find((item: Item) => item.id === id)
+  }
+
+  /**
+   * 
+   * @param id 
+   * @param target 
+   * @returns
+   * @throws Error - The item cannot be found on player inventory
+   */
+  public useItem(id: string, target: Player = this): ItemResult {
+    const item = this.findItemById(id)
+
+    if (typeof item === 'undefined') {
+      throw new Error(`The item ${id} cannot be found on player inventory`);
+    }
+
+    const result = item.consume(target)
+
+    if (result.success) item.reduceQuantity(1)
+
+    return result
   }
 
   public canUseLaptop(): boolean {

@@ -1,6 +1,7 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { Player } from "../../entities/Player";
 import { PROGRAMMING_LANGUAGE } from "../../types/enums";
+import { BatteryChargerFactory } from "../factories/Items/BatteryChargerFactory";
 import { LaptopFactory } from "../factories/LaptopFactory";
 import { PlayerFactory } from "../factories/PlayerFactory";
 
@@ -49,3 +50,25 @@ describe("Player basic functionality", () => {
     expect(player.canUseLaptop()).toBeFalsy();
   });
 });
+
+describe("Player items inventory", () => {
+  it("should throw an error if item selected is not found on player inventory", () => {
+    const player = new PlayerFactory().create({
+      items: []
+    });
+
+    expect(() => player.useItem("fake id")).toThrowError(`The item fake id cannot be found on player inventory`)
+  })
+
+  it("should reduce quantity when item is used", () => {
+    const batteryChargerItem = new BatteryChargerFactory().create({ quantity: 1 });
+    const itemSpy = vi.spyOn(batteryChargerItem, 'reduceQuantity')
+    const player = new PlayerFactory().create({ items: [batteryChargerItem] });
+
+    expect(batteryChargerItem.quantity).toBe(1)
+    player.useItem(batteryChargerItem.id)
+
+    expect(itemSpy).toHaveBeenCalledOnce()
+    expect(batteryChargerItem.quantity).toBe(0)
+  })
+})

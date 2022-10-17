@@ -58,6 +58,7 @@ describe("Battery charger item functionality", () => {
 
         expect(player.accessLaptop().isFullBattery()).toBeFalsy()
         expect(player.accessItems()[0].canBeUsedOnPlayer(player)).toBeTruthy()
+
         player.accessItems()[0].consume(player)
         expect(player.accessLaptop().isFullBattery()).toBeTruthy()
     })
