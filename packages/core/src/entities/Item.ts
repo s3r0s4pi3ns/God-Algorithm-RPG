@@ -38,12 +38,12 @@ export abstract class Item {
         this.quantity = quantity;
     }
 
-    public incrementQuantity(increment: number): void {
-        this.setQuantity(this.quantity + increment)
+    public incrementQuantity(value: number): void {
+        this.setQuantity(this.quantity + value)
     }
 
-    public reduceQuantity(decrement: number): void {
-        this.setQuantity(this.quantity - decrement)
+    public reduceQuantity(value: number): void {
+        this.setQuantity(this.quantity - value)
     }
 
     /**

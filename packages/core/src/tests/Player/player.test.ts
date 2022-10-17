@@ -60,6 +60,16 @@ describe("Player items inventory", () => {
     expect(() => player.useItem("fake id")).toThrowError(`The item fake id cannot be found on player inventory`)
   })
 
+  it("should find an item by his multiple properties", () => {
+    const batteryChargerItem = new BatteryChargerFactory().create();
+    const player = new PlayerFactory().create({ items: [batteryChargerItem] });
+
+    expect(player.findItemBy(batteryChargerItem.id)).toBe(batteryChargerItem)
+    expect(player.findItemBy(batteryChargerItem.name, 'name')).toBe(batteryChargerItem)
+    expect(player.findItemBy(batteryChargerItem.description, 'description')).toBe(batteryChargerItem)
+    expect(player.findItemBy(batteryChargerItem.quantity, 'quantity')).toBe(batteryChargerItem)
+  })
+
   it("should reduce quantity when item is used", () => {
     const batteryChargerItem = new BatteryChargerFactory().create({ quantity: 1 });
     const itemSpy = vi.spyOn(batteryChargerItem, 'reduceQuantity')
@@ -70,5 +80,6 @@ describe("Player items inventory", () => {
 
     expect(itemSpy).toHaveBeenCalledOnce()
     expect(batteryChargerItem.quantity).toBe(0)
+
   })
 })

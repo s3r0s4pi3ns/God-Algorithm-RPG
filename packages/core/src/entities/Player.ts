@@ -40,8 +40,8 @@ export class Player {
     return this.items;
   }
 
-  public findItemById(id: string): Item | undefined {
-    return this.accessItems().find((item: Item) => item.id === id)
+  public findItemBy(value: string | number, key: keyof Item = 'id',): Item | undefined {
+    return this.accessItems().find((item: Item) => item[key] === value)
   }
 
   /**
@@ -52,7 +52,7 @@ export class Player {
    * @throws Error - The item cannot be found on player inventory
    */
   public useItem(id: string, target: Player = this): ItemResult {
-    const item = this.findItemById(id)
+    const item = this.findItemBy(id)
 
     if (typeof item === 'undefined') {
       throw new Error(`The item ${id} cannot be found on player inventory`);
