@@ -28,13 +28,13 @@ export abstract class BattleState {
     turns: Turns
     isActive: boolean = true
 
-    constructor({ id, name, description, affectedPlayers, turns, isActive }: BattleStateParams) {
+    constructor({ id, name, description, affectedPlayers, turns, isActive = true }: BattleStateParams) {
         this.id = id
         this.name = name
         this.description = description
         this.affectedPlayers = affectedPlayers
         this.turns = turns
-        this.isActive = isActive || false
+        this.isActive = Boolean(isActive)
     }
 
     activate(): void {
@@ -64,5 +64,10 @@ export abstract class BattleState {
         if (this.turns.remaining <= 0) this.deactivate()
     }
 
-    abstract apply(): BattleStateResult
+    apply(): BattleStateResult {
+        this.spendTurn()
+        return this.effect()
+    }
+
+    abstract effect(): BattleStateResult
 }

@@ -1,15 +1,15 @@
-import { BattleState, BattleStateResult, Turns } from "../../entities/BattleState";
-import { Player } from "../../entities/Player";
+import { BattleState, BattleStateParams, BattleStateResult, Turns } from "../../entities/BattleState";
 
 export class MemoryLeak extends BattleState {
     static readonly MINIMUM_TURNS = 2
 
-    constructor(
-        affectedPlayers: Player[],
-        turns: Turns = { remaining: MemoryLeak.MINIMUM_TURNS, used: 0, step: 1 }
+    constructor({
+        affectedPlayers,
+        turns = { remaining: MemoryLeak.MINIMUM_TURNS, used: 0, step: 1 } }:
+        Pick<BattleStateParams, 'affectedPlayers' | 'turns'>
     ) {
         super({
-            id: 'memoryleak',
+            id: 'memory-leak',
             name: "Memory leak",
             description: "A normal memory leak",
             affectedPlayers,
@@ -17,17 +17,16 @@ export class MemoryLeak extends BattleState {
         })
     }
 
-    apply(): BattleStateResult {
-        if (this.turns.remaining > 0) {
-            this.spendTurn()
-            return {
-                message: "Memory leak applied",
-                turns: this.turns
-            }
-        }
+    static new({
+        affectedPlayers,
+        turns = { remaining: MemoryLeak.MINIMUM_TURNS, used: 0, step: 1 } }:
+        Pick<BattleStateParams, 'affectedPlayers' | 'turns'>): MemoryLeak {
+        return new this({ affectedPlayers, turns })
+    }
 
+    effect(): BattleStateResult {
         return {
-            message: "Turns for memory leak are over, the state was not applied",
+            message: "Memory leak applied",
             turns: this.turns
         }
     }
