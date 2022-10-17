@@ -39,8 +39,8 @@ export abstract class BattleState {
         this.isActive = Boolean(isActive)
     }
 
-    activate(turns: number): void {
-        this.turns.remaining = turns
+    activate(turns: number = 0): void {
+        this.turns.remaining += turns
         this.isActive = true;
     }
 
