@@ -10,6 +10,7 @@ export interface BattleStateParams {
 }
 
 export interface BattleStateResult {
+    state: BattleState
     message: string
     turns: Turns
 }
@@ -20,6 +21,7 @@ export interface Turns {
     step: number
 }
 
+export type BattleStateResultApplied = { [key: string]: BattleStateResult }
 export abstract class BattleState {
     id: string
     name: string
@@ -37,7 +39,8 @@ export abstract class BattleState {
         this.isActive = Boolean(isActive)
     }
 
-    activate(): void {
+    activate(turns: number): void {
+        this.turns.remaining = turns
         this.isActive = true;
     }
 
@@ -64,9 +67,15 @@ export abstract class BattleState {
         if (this.turns.remaining <= 0) this.deactivate()
     }
 
-    apply(): BattleStateResult {
+    apply(): BattleStateResultApplied {
         this.spendTurn()
-        return this.effect()
+        const results: BattleStateResultApplied = {}
+
+        this.affectedPlayers.forEach(player => {
+            results[player.id] = this.effect()
+        })
+
+        return results
     }
 
     abstract effect(): BattleStateResult

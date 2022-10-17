@@ -16,6 +16,7 @@ describe("Memory leak basic functionality", () => {
         expect(memoryLeak.isActive).toBeTruthy()
         memoryLeak.deactivate()
         expect(memoryLeak.isActive).toBeFalsy()
-
+        memoryLeak.activate()
+        expect(memoryLeak.isActive).toBeTruthy()
     })
 })
